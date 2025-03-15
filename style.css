@@ -1,0 +1,206 @@
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc, onSnapshot } from "firebase/firestore";
+
+// Firebase configuration (replace with your own)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Function to update the username
+function updateUsername(user) {
+    if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        getDoc(userDocRef)
+            .then((docSnap) => {
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    const username = userData.username;
+                    document.getElementById("username").textContent = `Hello, ${username}`;
+                } else {
+                    document.getElementById("username").textContent = "Hello, User";
+                }
+            })
+            .catch((error) => {
+                console.error("Error getting user document:", error);
+                document.getElementById("username").textContent = "Hello, User";
+            });
+    } else {
+        document.getElementById("username").textContent = "Hello, User";
+    }
+}
+
+// Function to update the balance
+function updateBalance(user) {
+    if (user) {
+        const balanceDocRef = doc(db, "balances", user.uid); // Or doc(db, "users", user.uid) if balance is in users collection.
+
+        onSnapshot(balanceDocRef, (doc) => {
+            if (doc.exists()) {
+                const balance = doc.data().balance;
+                document.getElementById("usd-value").textContent = balance;
+            } else {
+                document.getElementById("usd-value").textContent = "00";
+            }
+        });
+    } else {
+        document.getElementById("usd-value").textContent = "00";
+    }
+}
+
+// Listen for authentication state changes
+onAuthStateChanged(auth, (user) => {
+    updateUsername(user);
+    updateBalance(user); // Call updateBalance
+});
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.container {
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message {
+    color: #fff;
+}
+
+.welcome {
+    color: #ccc;
+}
+
+.more {
+    color: #888;
+}
+
+/* Profile Section */
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #333;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-info {
+    text-align: left;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.limit {
+    color: yellow;
+}
+
+.vip-upgrade {
+    background: blue;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Balance & Transactions */
+.balance-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.balance-card, .transaction-card {
+    background: #333;
+    padding: 15px;
+    border-radius: 5px;
+    width: 48%;
+}
+
+.balance-title {
+    font-size: 18px;
+    color: yellow;
+}
+
+.balance-subtitle {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.action-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    background: #444;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Services */
+.services {
+    margin-top: 15px;
+}
+
+.services-title {
+    color: #bbb;
+    text-align: center;
+}
+
+.service-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.service-btn {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 45%;
+    margin: 5px;
+    cursor: pointer;
+}
