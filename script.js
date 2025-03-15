@@ -1,36 +1,47 @@
-// Mock Admin Data (Editable for Admin)
-const adminData = {
-    activeDeposit: 200,  // Admin sets this value
-    activeBalance: 50,   // Admin sets this value
-    addedBonus: 10       // Admin sets this value
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+
+// Firebase configuration (replace with your own)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
 };
 
-// Load Admin Data into the UI
-document.getElementById("activeDeposit").textContent = `$${adminData.activeDeposit}`;
-document.getElementById("activeBalance").textContent = `$${adminData.activeBalance}`;
-document.getElementById("addedBonus").textContent = `$${adminData.addedBonus}`;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Open & Close Live Chat Modal
-function openLiveChat() {
-    document.getElementById("liveChatModal").style.display = "block";
+// Function to update the username
+function updateUsername(user) {
+    if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        getDoc(userDocRef)
+            .then((docSnap) => {
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    const username = userData.username; // Assuming your username field is called "username"
+                    document.getElementById("username").textContent = `Hello, ${username}`;
+                } else {
+                    document.getElementById("username").textContent = "Hello, User";
+                }
+            })
+            .catch((error) => {
+                console.error("Error getting user document:", error);
+                document.getElementById("username").textContent = "Hello, User";
+            });
+    } else {
+        document.getElementById("username").textContent = "Hello, User";
+    }
 }
 
-function closeLiveChat() {
-    document.getElementById("liveChatModal").style.display = "none";
-}
-
-// Open & Close Withdraw Form Modal
-function openWithdrawForm() {
-    document.getElementById("withdrawModal").style.display = "block";
-}
-
-function closeWithdrawForm() {
-    document.getElementById("withdrawModal").style.display = "none";
-}
-
-// Handle Withdraw Form Submission
-document.getElementById("withdrawForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    alert("Withdrawal request submitted!");
-    closeWithdrawForm();
+// Listen for authentication state changes
+onAuthStateChanged(auth, (user) => {
+    updateUsername(user);
+    // Balance will stay at 00. Only admin should update it
 });
