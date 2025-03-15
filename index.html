@@ -3,74 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
-    <script defer src="chart.js"></script>
+    <title>Crypto Finance Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Crypto Chart -->
-        <div class="crypto-chart">
-            <canvas id="cryptoChart"></canvas>
+
+    <div class="container">
+
+        <div class="header">
+            <p class="message"></p>
+            <p class="welcome">Welcome to <strong>Earn With Bit Digital Mining</strong></p>
+            <p class="more"> </p>
         </div>
 
-        <!-- Account Overview Section -->
-        <div class="account-overview">
-            <h2>Account Overview</h2>
-        </div>
-
-        <!-- User Info -->
-        <div class="user-info">
-            <p><span class="icon">👤</span> <strong>Username:</strong> <span id="username">Guest123</span></p>
-        </div>
-
-        <!-- Three Columns Section -->
-        <div class="columns">
-            <!-- Active Deposit -->
-            <div class="column">
-                <h3>Active Deposit</h3>
-                <p id="activeDeposit">$0</p>
-                <button onclick="openLiveChat()">Deposit</button> <!-- Fixed Button -->
-            </div>
-
-            <!-- Active Balance -->
-            <div class="column">
-                <h3><span class="icon">💵</span> Active Balance</h3>
-                <p id="activeBalance">$0</p>
-                <button onclick="openWithdrawForm()">Withdraw</button>
-            </div>
-
-            <!-- Added Bonus -->
-            <div class="column">
-                <h3>Added Bonus</h3>
-                <p id="addedBonus">$0</p>
+        <div class="profile-section">
+            <div class="profile">
+                <img src="https://github.com/bitdigitalmining/Imagehosting/blob/main/IMG_9529.png?raw=true.png" alt="USDT Logo" class="profile-img">
+                <div class="profile-info">
+                    <p class="username" id="username">Loading...</p>
+                    <p class="limit"><span class="highlight"></span></p>
+                    <p class="limit"><span class="highlight"></span></p>
+                </div>
             </div>
         </div>
+
+        <div class="balance-actions">
+            <div class="balance-card">
+                <p class="balance-title"><span class="highlight">$</span> <span id="usd-value">00</span></p>
+                <p class="balance-subtitle">Balance</p>
+            </div>
+            <div class="transaction-card">
+                <button class="action-btn">Deposit</button>
+                <button class="action-btn">Withdraw</button>
+                <button class="action-btn">Transfer</button>
+            </div>
+        </div>
+
+        <div class="services">
+            <h3 class="services-title">Other Services</h3>
+            <div class="service-buttons">
+                <button class="service-btn">Financing</button>
+                <button class="service-btn">Wallet</button>
+                <button class="service-btn">Security</button>
+                <button class="service-btn">Questions</button>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Live Chat Modal -->
-    <div id="liveChatModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLiveChat()">&times;</span>
-            <h2>Live Chat</h2>
-            <p>Chat with support...</p>
-        </div>
-    </div>
+    <script type="module" src="assets/dashboard.js"></script>
 
-    <!-- Withdraw Form Modal -->
-    <div id="withdrawModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeWithdrawForm()">&times;</span>
-            <h2>Withdraw Funds</h2>
-            <form id="withdrawForm">
-                <label for="bankAccount">Bank Account:</label>
-                <input type="text" id="bankAccount" required>
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" required>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    </div>
 </body>
 </html>
